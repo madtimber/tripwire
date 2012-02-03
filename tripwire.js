@@ -5,17 +5,25 @@ function Tripwire(obj) {
     this.scrollDir = 'down';
     this.tripUp = obj.tripUp || function(){};
     this.tripDown = obj.tripDown || function(){};
-    
+    this.tripContainer = this._setContainer(obj.tripContainer);
     this._attachToScrollEvent();
 };
 
+Tripwire.prototype._setContainer = function(el) {
+    el = el || window;
+    if(el !== window && el !== document) {
+        el = el.indexOf('#') === 0 ? el : "#" + el;
+    }
+    return el;
+};
+
 Tripwire.prototype._getCurrentScrollPoint = function() {
-    return $(window).scrollTop();
+    return $(this.tripContainer).scrollTop();
 };
 
 Tripwire.prototype._attachToScrollEvent = function() {
     var _this = this;
-    $(document).scroll(function(e) {
+    $(this.tripContainer).scroll(function(e) {
         _this._handleScrollEvent();
     });
 };
